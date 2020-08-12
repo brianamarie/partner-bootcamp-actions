@@ -28,7 +28,7 @@ Now that you have an Azure account, subscription and the CLI tools let's get Pro
 
 We are going to mimic a real world entitlements scenario. We want to allow our users to add themselves to the entitlements for specific resource simply by commenting `/add-me` in a GitHub issue.
 
-We recognize that this isn't the safest of tasks in this form, so we will use Actions to run a CI/CD pipeline after we add a feature to make to the app that will make it a bit more safe. Instead of adding the user directly, we will have the application open a pull request to allow the owner of the repo to approve that persons entitlement or not before they are granted an invitation.
+We recognize that this isn't the safest of tasks in this form, so we don't recommend installing this Probot app in any repository that matters. We will however make a small change to the application and perform CI/CD with Actions to get that change into production. Once All the activities are done, we will remove this Probot app from production using Actions 🎉
 
 > **Again, the source code will be provided.**
 

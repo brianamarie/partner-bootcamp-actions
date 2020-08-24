@@ -1,0 +1,57 @@
+name: Configure Azure environment
+
+on:
+  issues:
+    types: [closed]
+
+env:
+  AZURE_RESOURCE_GROUP: probot-applications
+  AZURE_APP_PLAN: prod-probot-apps
+  AZURE_LOCATION: '"Central US"'
+  AZURE_WEBAPP_NAME: probot-add-collaborators
+
+jobs:
+  setup-up-azure-resources:
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.issue.labels.*.name, 'provision probot app')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Azure resource group
+        if: success()
+        run: |
+          az group create --location ${{env.AZURE_LOCATION}} --name ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+      - name: Create Azure app service plan
+        if: success()
+        run: |
+          az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN}} --is-linux --sku F1 --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+      - name: Create webapp resource
+        if: success()
+        run: |
+          az webapp create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --plan ${{ env.AZURE_APP_PLAN }} --name ${{ env.AZURE_WEBAPP_NAME }}  --runtime "NODE|12-lts" --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+      - name: Configure probot app secrets
+        if: success()
+        run: |
+          az webapp config appsettings set  --name ${{ env.AZURE_WEBAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}} --settings APP_ID=${{secrets.PROBOT_APP_ID}} PRIVATE_KEY="${{secrets.PROBOT_APP_PRI_KEY}}" WEBHOOK_SECRET=${{secrets.PROBOT_WEBHOOK_SECRET}}
+      - name: use Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+
+      - name: install deps
+        run: |
+          npm install
+
+      - name: Deploy application
+        if: success()
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}

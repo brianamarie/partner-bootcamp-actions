@@ -40,6 +40,7 @@ Let's get this application started.
    - **Webhook Secret**: Generate a unique secret with `openssl rand -base64 32` and save it. You will need it in the next activity!
 1. Assign the following permission to the app:
    - Administration: **Read & write**
+   - Issues: **Read & write**
    - Metadata: **Read-only**
 1. Subscribe to the following events:
    - Issue comment

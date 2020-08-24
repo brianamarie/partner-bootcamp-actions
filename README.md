@@ -47,7 +47,8 @@ Let's get this application started.
    - Issues
    - Member
 1. Download the **private key** from the app
-1. Go to the app's public page, and click the green **Install** button on the top left of the app page. You should play it safe and install this app on an empty dummy repository for now!
+   - _Note: You do not need to do anything with the key at this time, but later you will need to open it as plain text and copy it as a key._
+2. Go to the app's public page, and click the green **Install** button on the top left of the app page. You should play it safe and install this app on an empty dummy repository for now!
 
 ---
 

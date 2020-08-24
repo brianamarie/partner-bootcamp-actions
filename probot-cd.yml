@@ -1,0 +1,15 @@
+name: Test and deploy probot on trunk
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+env:
+  AZURE_WEBAPP_NAME: probot-add-collaborators
+
+jobs:
+  package-and-deploy-to-azure:
+    runs-on: ubuntu-latest
+    steps:

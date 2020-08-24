@@ -1,0 +1,12 @@
+name: Test probot on non-trunk
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - main
+
+jobs:
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
